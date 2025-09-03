@@ -28,27 +28,99 @@ import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import java.awt.Color;
+import java.util.TimeZone;
 
 @ConfigGroup("skybox")
 public interface SkyboxPluginConfig extends Config
 {
     @ConfigItem(
+            keyName = "SunriseColor",
+            name = "Sunrise Colour",
+            description = "Early morning colour",
+            position = 0
+    )
+    default Color getSunriseColor() {
+        return Color.YELLOW;
+    }
+
+    @ConfigItem(
             keyName = "dayColor",
             name = "Day Color",
-            description = "Cor do céu durante o dia"
+            description = "12pm Colour",
+            position = 1
     )
-    default Color getDayColor()
-    {
-        return Color.CYAN; // cor padrão
+    default Color getDayColor() {
+        return Color.CYAN;
+    }
+
+    @ConfigItem(
+            keyName = "sunsetColor",
+            name = "Sunset Colour",
+            description = "Late Afternoon Colour",
+            position = 2
+    )
+    default Color getSunsetColor() {
+        return Color.LIGHT_GRAY;
     }
 
     @ConfigItem(
             keyName = "nightColor",
-            name = "Night Color",
-            description = "Cor do céu durante a noite"
+            name = "Night Colour",
+            description = "12am Colour",
+            position = 3
     )
     default Color getNightColor()
     {
-        return Color.BLUE.darker(); // cor padrão
+        return Color.BLUE.darker();
     }
+
+    @ConfigItem(
+            keyName = "useRealTimeCycle",
+            name = "Use Real-Time Cycle",
+            description = "Toggle between fast test cycle or real-time day/night cycle",
+            position = 5
+    )
+    default boolean useRealTimeCycle()
+    {
+        return true; // default value
+    }
+
+    @ConfigItem(
+            keyName = "cycleDuration",
+            name = "Cycle Duration (seconds)",
+            description = "Set the total duration of the day/night cycle when using fast mode",
+            position = 6
+    )
+    default int cycleDuration()
+    {
+        return 20; // valor padrão em segundos
+    }
+    @ConfigItem(
+            keyName = "showOverlay",
+            name = "Show Virtual Time Overlay",
+            description = "Toggle the virtual time overlay on/off",
+            position = 7
+    )
+    default boolean showOverlay() {
+        return true;
+    }
+    @ConfigItem(
+            keyName = "city",
+            name = "City",
+            description = "Select your city to calculate sunrise/sunset. This does fancy astronomical calculations to estimate when the sun will rise and sunset in your city.",
+            position = 8
+    )
+    default City getCity() { return City.SAO_PAULO; }
+
+    enum City
+    {
+        SAO_PAULO,
+        LONDON,
+        NEW_YORK,
+        TOKYO,
+        SYDNEY
+    }
+
+
+
 }

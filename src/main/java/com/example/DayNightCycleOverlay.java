@@ -8,11 +8,11 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.time.ZonedDateTime;
 
-public class SkyboxTimeOverlay extends Overlay
+public class DayNightCycleOverlay extends Overlay
 {
-    private final SkyboxPlugin plugin;
+    private final DayNightCyclePlugin plugin;
 
-    public SkyboxTimeOverlay(SkyboxPlugin plugin)
+    public DayNightCycleOverlay(DayNightCyclePlugin plugin)
     {
         this.plugin = plugin;
         setPosition(OverlayPosition.TOP_LEFT);

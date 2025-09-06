@@ -7,7 +7,7 @@ public class ExamplePluginTest
 {
 	public static void main(String[] args) throws Exception
 	{
-		ExternalPluginManager.loadBuiltin(SkyboxPlugin.class);
+		ExternalPluginManager.loadBuiltin(DayNightCyclePlugin.class);
 		RuneLite.main(args);
 	}
 }

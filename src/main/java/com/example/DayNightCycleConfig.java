@@ -74,7 +74,7 @@ public interface DayNightCycleConfig extends Config
 	)
 	default Color getNightColor()
 	{
-		return new Color(6, 6, 9);
+		return new Color(13, 17, 26);
 	}
 
 	@ConfigItem(
@@ -228,7 +228,7 @@ public interface DayNightCycleConfig extends Config
 	@ConfigItem(
 		keyName = "useCustomHour",
 		name = "Use Custom Hour",
-		description = "If enabled, the day/night cycle will use the hour below instead of real time",
+		description = "If enabled, the day/night cycle will use the hour below instead of real time. For now custom hour is using cycle duration 86400 seconds is real time.",
 		position = 12
 	)
 	default boolean useCustomHour()

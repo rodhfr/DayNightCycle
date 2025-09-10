@@ -5,9 +5,9 @@ import net.runelite.client.externalplugins.ExternalPluginManager;
 
 public class Mainrunner
 {
-    public static void main(String[] args) throws Exception
-    {
-        ExternalPluginManager.loadBuiltin(DayNightCyclePlugin.class);
-        RuneLite.main(args);
-    }
+	public static void main(String[] args) throws Exception
+	{
+		ExternalPluginManager.loadBuiltin(DayNightCyclePlugin.class);
+		RuneLite.main(args);
+	}
 }

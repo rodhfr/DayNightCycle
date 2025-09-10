@@ -10,25 +10,25 @@ import java.time.ZonedDateTime;
 
 public class DayNightCycleOverlay extends Overlay
 {
-    private final DayNightCyclePlugin plugin;
+	private final DayNightCyclePlugin plugin;
 
-    public DayNightCycleOverlay(DayNightCyclePlugin plugin)
-    {
-        this.plugin = plugin;
-        setPosition(OverlayPosition.TOP_LEFT);
-        setLayer(OverlayLayer.ABOVE_WIDGETS);
-    }
+	public DayNightCycleOverlay(DayNightCyclePlugin plugin)
+	{
+		this.plugin = plugin;
+		setPosition(OverlayPosition.TOP_LEFT);
+		setLayer(OverlayLayer.ABOVE_WIDGETS);
+	}
 
-    @Override
-    public Dimension render(Graphics2D graphics)
-    {
-        ZonedDateTime virtualTime = plugin.getVirtualTime();
-        String time = String.format("%02d:%02d:%02d",
-                virtualTime.getHour(),
-                virtualTime.getMinute(),
-                virtualTime.getSecond());
+	@Override
+	public Dimension render(Graphics2D graphics)
+	{
+		ZonedDateTime virtualTime = plugin.getVirtualTime();
+		String time = String.format("%02d:%02d:%02d",
+			virtualTime.getHour(),
+			virtualTime.getMinute(),
+			virtualTime.getSecond());
 
-        graphics.drawString("Virtual Time: " + time, 10, 20);
-        return null;
-    }
+		graphics.drawString("Virtual Time: " + time, 10, 20);
+		return null;
+	}
 }

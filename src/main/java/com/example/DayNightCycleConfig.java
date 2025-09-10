@@ -123,76 +123,72 @@ public interface DayNightCycleConfig extends Config
 
 	enum City
 	{
-		// Asia
-		TOKYO, // Japan
-		OSAKA, // Japan
-		SINGAPORE, // Singapore
-		KUALA_LUMPUR, // Malaysia
-		SHANGHAI, // China
-		BEIJING, // China
-		CHONGQING, // China
-		TIANJIN, // China
-		GUANGZHOU, // China
-		SHENZHEN, // China
-		HONG_KONG, // China
-		TAIPEI, // China
-		DELHI, // India
-		MUMBAI, // India
-		KOLKATA, // India
-		CHENNAI, // India
-		NEW_DELHI, // India
-		BANGALORE, // India
-		KARACHI, // Pakistan
-		LAHORE, // Pakistan
-		DHAKA, // Bangladesh
-		BANGKOK, // Thailand
-		HO_CHI_MINH, // Vietnam
-		MANILA, // Philippines
-		JAKARTA, // Indonesia
+		TOKYO(35.6895, 139.6917, "Asia/Tokyo"),
+		DELHI(28.7041, 77.1025, "Asia/Kolkata"),
+		SHANGHAI(31.2304, 121.4737, "Asia/Shanghai"),
+		BEIJING(39.9042, 116.4074, "Asia/Shanghai"),
+		SINGAPORE(1.3521, 103.8198, "Asia/Singapore"),
+		SEOUL(37.5665, 126.9780, "Asia/Seoul"),
+		BANGKOK(13.7563, 100.5018, "Asia/Bangkok"),
+		HONG_KONG(22.3193, 114.1694, "Asia/Hong_Kong"),
+		KUALA_LUMPUR(3.1390, 101.6869, "Asia/Kuala_Lumpur"),
+		MUMBAI(19.0760, 72.8777, "Asia/Kolkata"),
+		LOS_ANGELES(34.0522, -118.2437, "America/Los_Angeles"),
+		NEW_YORK(40.7128, -74.0060, "America/New_York"),
+		CHICAGO(41.8781, -87.6298, "America/Chicago"),
+		MIAMI(25.7617, -80.1918, "America/New_York"),
+		TORONTO(43.6511, -79.3470, "America/Toronto"),
+		MEXICO_CITY(19.4326, -99.1332, "America/Mexico_City"),
+		SAO_PAULO(-23.5505, -46.6333, "America/Sao_Paulo"),
+		JOAO_PESSOA(-7.1153, -34.8641, "America/Fortaleza"),
+		RIO_DE_JANEIRO(-22.9068, -43.1729, "America/Sao_Paulo"),
+		BUENOS_AIRES(-34.6037, -58.3816, "America/Argentina/Buenos_Aires"),
+		LIMA(-12.0464, -77.0428, "America/Lima"),
+		LONDON(51.5074, -0.1278, "Europe/London"),
+		PARIS(48.8566, 2.3522, "Europe/Paris"),
+		BERLIN(52.5200, 13.4050, "Europe/Berlin"),
+		MADRID(40.4168, -3.7038, "Europe/Madrid"),
+		ROME(41.9028, 12.4964, "Europe/Rome"),
+		MOSCOW(55.7558, 37.6173, "Europe/Moscow"),
+		ISTANBUL(41.0082, 28.9784, "Europe/Istanbul"),
+		DUBAI(25.2048, 55.2708, "Asia/Dubai"),
+		JEDDAH(21.4858, 39.1925, "Asia/Riyadh"),
+		CAPE_TOWN(-33.9249, 18.4241, "Africa/Johannesburg"),
+		JOHANNESBURG(-26.2041, 28.0473, "Africa/Johannesburg"),
+		CAIRO(30.0444, 31.2357, "Africa/Cairo"),
+		Nairobi(-1.2921, 36.8219, "Africa/Nairobi"),
+		SYDNEY(-33.8688, 151.2093, "Australia/Sydney"),
+		MELBOURNE(-37.8136, 144.9631, "Australia/Melbourne"),
+		AUCKLAND(-36.8485, 174.7633, "Pacific/Auckland"),
+		WELLINGTON(-41.2865, 174.7762, "Pacific/Auckland"),
+		HANOI(21.0278, 105.8342, "Asia/Bangkok"),
+		JAKARTA(-6.2088, 106.8456, "Asia/Jakarta"),
+		KATHMANDU(27.7172, 85.3240, "Asia/Kathmandu"),
+		DUBLIN(53.3498, -6.2603, "Europe/Dublin"),
+		AMSTERDAM(52.3676, 4.9041, "Europe/Amsterdam"),
+		BRUSSELS(50.8503, 4.3517, "Europe/Brussels"),
+		OSLO(59.9139, 10.7522, "Europe/Oslo"),
+		STOCKHOLM(59.3293, 18.0686, "Europe/Stockholm"),
+		HELSINKI(60.1699, 24.9384, "Europe/Helsinki"),
+		VIENNA(48.2082, 16.3738, "Europe/Vienna"),
+		ZURICH(47.3769, 8.5417, "Europe/Zurich"),
+		ATHENS(37.9838, 23.7275, "Europe/Athens");
 
-		// Oceania
-		SYDNEY, // Australia
-		MELBOURNE, // Australia
 
-		// Europa
-		PARIS,        // France
-		MADRID,       // Spain
-		LONDON,       // UK
-		MANCHESTER,   // UK
-		MOSCOW,       // Russia
-		ISTANBUL,     // Türkiye
-		KYIV,         // Ukraine
-		BEIRUT,       // Lebanon
+		private final double latitude;
+		private final double longitude;
+		private final String timezone;
 
-		// North America
-		NEW_YORK,
-		CHICAGO,
-		LOS_ANGELES,
-		HOUSTON,
-		WASHINGTON,
-		TORONTO,
-		MIAMI,
-		MEXICO_CITY,
+		City(double lat, double lon, String tz)
+		{
+			this.latitude = lat;
+			this.longitude = lon;
+			this.timezone = tz;
+		}
 
-		// South America
-		SAO_PAULO, // Brazil
-		BRASILIA, // Brazil
-		RIO_DE_JANEIRO, // Brazil
-		BELO_HORIZONTE, // Brazil
-		JOAO_PESSOA, // Brazil
-		RIO_BRANCO, // Brazil
-		MANAUS, // Brazil
-		BUENOS_AIRES, // Argentine
-		LIMA, // Peru
-
-		// África
-		LAGOS, // Nigeria
-		KINSHASA, // Congo
-		BANGUI, // Central African Republic
-		CAIRO, // Egypt
-
-		// Western Asia
-		BAGHDAD
+		public double getLatitude() { return latitude; }
+		public double getLongitude() { return longitude; }
+		public String getTimezone() { return timezone; }
 	}
 
 

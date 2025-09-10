@@ -129,7 +129,7 @@ public class DayNightCyclePlugin extends Plugin
 		if (client.getGameState() != GameState.LOGGED_IN)
 			return;
 
-		// get latitude, longitude and timezone
+		// Obter latitude, longitude e timezone
 		double latitude, longitude;
 		ZoneId zone;
 
@@ -150,13 +150,13 @@ public class DayNightCyclePlugin extends Plugin
 
 		LocalDate today = LocalDate.now(zone);
 
-		// Calculate solar event using algorithm
+		// Calcular eventos solares
 		ZonedDateTime sunrise = SunCalculator.calculateSunrise(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
 			latitude, longitude, zone);
 		ZonedDateTime sunset  = SunCalculator.calculateSunset(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
 			latitude, longitude, zone);
 
-		// Start Transition 30m before solar event
+		// Transições 30min antes do evento
 		ZonedDateTime sunriseStart = sunrise.minusMinutes(30);
 		ZonedDateTime sunsetStart  = sunset.minusMinutes(30);
 
@@ -171,24 +171,59 @@ public class DayNightCyclePlugin extends Plugin
 		Color skyColor;
 
 		if (nowSec < sunriseStartSec)
+		{
+			// Noite
 			skyColor = config.getNightColor();
+		}
 		else if (nowSec < sunriseEndSec)
 		{
+			// Amanhecer realista: Night → Sunrise → Day
 			float progress = (float)(nowSec - sunriseStartSec) / (sunriseEndSec - sunriseStartSec);
-			skyColor = interpolateColor(config.getNightColor(), config.getDayColor(), progress);
+
+			if (progress < 0.7f)
+			{
+				// Mantém tons quentes do sunrise
+				float curveProgress = (float) Math.sin(progress / 0.7 * (Math.PI / 2));
+				skyColor = interpolateColor(config.getNightColor(), config.getSunriseColor(), curveProgress);
+			}
+			else
+			{
+				// Transição suave final para o DayColor
+				float curveProgress = (float) Math.sin((progress - 0.7f) / 0.3 * (Math.PI / 2));
+				skyColor = interpolateColor(config.getSunriseColor(), config.getDayColor(), curveProgress);
+			}
 		}
 		else if (nowSec < sunsetStartSec)
+		{
+			// Dia
 			skyColor = config.getDayColor();
+		}
 		else if (nowSec < sunsetEndSec)
 		{
+			// Entardecer realista: Day → Sunset → Night
 			float progress = (float)(nowSec - sunsetStartSec) / (sunsetEndSec - sunsetStartSec);
-			skyColor = interpolateColor(config.getDayColor(), config.getNightColor(), progress);
+
+			if (progress < 0.7f)
+			{
+				float curveProgress = (float) Math.sin(progress / 0.7 * (Math.PI / 2));
+				skyColor = interpolateColor(config.getDayColor(), config.getSunsetColor(), curveProgress);
+			}
+			else
+			{
+				float curveProgress = (float) Math.sin((progress - 0.7f) / 0.3 * (Math.PI / 2));
+				skyColor = interpolateColor(config.getSunsetColor(), config.getNightColor(), curveProgress);
+			}
 		}
 		else
+		{
+			// Noite
 			skyColor = config.getNightColor();
+		}
 
 		client.setSkyboxColor(skyColor.getRGB());
 	}
+
+
 
 	private Color interpolateColor(Color start, Color end, float t)
 	{
@@ -234,14 +269,21 @@ public class DayNightCyclePlugin extends Plugin
 
 		if (config.useCustomHour() && customHourStartTime != null)
 		{
+			// tempo real desde que customHour foi definido
 			long elapsedMillis = System.currentTimeMillis() - realMillisAtCustomStart;
-			return customHourStartTime.plusNanos(elapsedMillis * 1_000_000L).withZoneSameInstant(zone);
+
+			// calcular fator de aceleração do ciclo
+			double cycleSeconds = config.cycleDuration(); // duração completa do ciclo em segundos
+			double factor = 24 * 60 * 60 / cycleSeconds;  // quantos segundos virtuais por segundo real
+
+			long virtualMillis = (long)(elapsedMillis * factor);
+			return customHourStartTime.plusNanos(virtualMillis * 1_000_000L).withZoneSameInstant(zone);
 		}
 
 		if (config.useRealTimeCycle())
 			return ZonedDateTime.now(zone);
 
-		// Fast Test
+		// Ciclo rápido (modo teste)
 		long millis = System.currentTimeMillis();
 		float t = (millis % (config.cycleDuration() * 1000L)) / (float)(config.cycleDuration() * 1000L);
 		int totalSeconds = (int)(t * 24 * 60 * 60);
@@ -251,6 +293,7 @@ public class DayNightCyclePlugin extends Plugin
 
 		return ZonedDateTime.now(zone).withHour(hour).withMinute(minute).withSecond(second).withNano(0);
 	}
+
 }
 
 // https://web.archive.org/web/20161202180207/http://williams.best.vwh.net/sunrise_sunset_algorithm.htm

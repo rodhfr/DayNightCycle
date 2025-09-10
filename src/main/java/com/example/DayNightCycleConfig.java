@@ -35,8 +35,8 @@ public interface DayNightCycleConfig extends Config
 {
 	@ConfigItem(
 		keyName = "SunriseColor",
-		name = "Sunrise Colour",
-		description = "Early morning colour",
+		name = "Sunrise Color",
+		description = "Early Morning Color",
 		position = 0
 	)
 	default Color getSunriseColor()
@@ -47,7 +47,7 @@ public interface DayNightCycleConfig extends Config
 	@ConfigItem(
 		keyName = "dayColor",
 		name = "Day Color",
-		description = "12pm Colour",
+		description = "12PM color",
 		position = 1
 	)
 	default Color getDayColor()
@@ -57,8 +57,8 @@ public interface DayNightCycleConfig extends Config
 
 	@ConfigItem(
 		keyName = "sunsetColor",
-		name = "Sunset Colour",
-		description = "Late Afternoon Colour",
+		name = "Sunset Color",
+		description = "Late afternoon color",
 		position = 2
 	)
 	default Color getSunsetColor()
@@ -68,8 +68,8 @@ public interface DayNightCycleConfig extends Config
 
 	@ConfigItem(
 		keyName = "nightColor",
-		name = "Night Colour",
-		description = "12am Colour",
+		name = "Night Color",
+		description = "12AM color",
 		position = 3
 	)
 	default Color getNightColor()
@@ -90,8 +90,8 @@ public interface DayNightCycleConfig extends Config
 
 	@ConfigItem(
 		keyName = "cycleDuration",
-		name = "Cycle Duration (seconds)",
-		description = "Set the total duration of the day/night cycle when using fast mode",
+		name = "Cycle Duration",
+		description = "(Seconds) Set the total duration of the day/night cycle when using fast mode",
 		position = 6
 	)
 	default int cycleDuration()
@@ -107,7 +107,7 @@ public interface DayNightCycleConfig extends Config
 	)
 	default boolean showOverlay()
 	{
-		return false;
+		return true;
 	}
 
 	@ConfigItem(
@@ -186,9 +186,20 @@ public interface DayNightCycleConfig extends Config
 			this.timezone = tz;
 		}
 
-		public double getLatitude() { return latitude; }
-		public double getLongitude() { return longitude; }
-		public String getTimezone() { return timezone; }
+		public double getLatitude()
+		{
+			return latitude;
+		}
+
+		public double getLongitude()
+		{
+			return longitude;
+		}
+
+		public String getTimezone()
+		{
+			return timezone;
+		}
 	}
 
 
@@ -227,7 +238,7 @@ public interface DayNightCycleConfig extends Config
 
 	@ConfigItem(
 		keyName = "useCustomHour",
-		name = "Use Custom Hour",
+		name = "Use Custom Time",
 		description = "If enabled, the day/night cycle will use the hour below instead of real time. For now custom hour is using cycle duration 86400 seconds is real time.",
 		position = 12
 	)
@@ -244,7 +255,7 @@ public interface DayNightCycleConfig extends Config
 	)
 	default String customHour()
 	{
-		return "12:00:00"; // default noon
+		return "05:00:00"; // default noon
 	}
 
 }

@@ -84,7 +84,9 @@ public class DayNightCyclePlugin extends Plugin
 	{
 		overlayManager.remove(timeOverlay);
 		if (config.showOverlay())
+		{
 			overlayManager.add(timeOverlay);
+		}
 	}
 
 	@Override
@@ -98,28 +100,38 @@ public class DayNightCyclePlugin extends Plugin
 	public void onGameStateChanged(GameStateChanged gameStateChanged)
 	{
 		if (gameStateChanged.getGameState() == GameState.LOGIN_SCREEN)
+		{
 			client.setSkyboxColor(0);
+		}
 	}
 
 	@Subscribe
 	public void onConfigChanged(ConfigChanged event)
 	{
 		if (!event.getGroup().equals("dayNightCycle"))
+		{
 			return;
+		}
 
 		if (event.getKey().equals("showOverlay"))
 		{
 			overlayManager.remove(timeOverlay);
 			if (config.showOverlay())
+			{
 				overlayManager.add(timeOverlay);
+			}
 		}
 
 		if (event.getKey().equals("customHour") || event.getKey().equals("useCustomHour"))
 		{
 			if (config.useCustomHour())
+			{
 				setCustomHour(config.customHour());
+			}
 			else
+			{
 				customHourStartTime = null;
+			}
 		}
 	}
 
@@ -127,9 +139,10 @@ public class DayNightCyclePlugin extends Plugin
 	public void onBeforeRender(BeforeRender event)
 	{
 		if (client.getGameState() != GameState.LOGGED_IN)
+		{
 			return;
+		}
 
-		// Obter latitude, longitude e timezone
 		double latitude, longitude;
 		ZoneId zone;
 
@@ -150,58 +163,51 @@ public class DayNightCyclePlugin extends Plugin
 
 		LocalDate today = LocalDate.now(zone);
 
-		// Calcular eventos solares
 		ZonedDateTime sunrise = SunCalculator.calculateSunrise(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
 			latitude, longitude, zone);
-		ZonedDateTime sunset  = SunCalculator.calculateSunset(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
+		ZonedDateTime sunset = SunCalculator.calculateSunset(today.getYear(), today.getMonthValue(), today.getDayOfMonth(),
 			latitude, longitude, zone);
 
-		// Transições 30min antes do evento
 		ZonedDateTime sunriseStart = sunrise.minusMinutes(30);
-		ZonedDateTime sunsetStart  = sunset.minusMinutes(30);
+		ZonedDateTime sunsetStart = sunset.minusMinutes(30);
 
 		ZonedDateTime virtualTime = getVirtualTime();
 		long nowSec = virtualTime.toEpochSecond();
 
 		long sunriseStartSec = sunriseStart.toEpochSecond();
-		long sunriseEndSec   = sunrise.toEpochSecond();
-		long sunsetStartSec  = sunsetStart.toEpochSecond();
-		long sunsetEndSec    = sunset.toEpochSecond();
+		long sunriseEndSec = sunrise.toEpochSecond();
+		long sunsetStartSec = sunsetStart.toEpochSecond();
+		long sunsetEndSec = sunset.toEpochSecond();
 
 		Color skyColor;
 
 		if (nowSec < sunriseStartSec)
 		{
-			// Noite
 			skyColor = config.getNightColor();
 		}
 		else if (nowSec < sunriseEndSec)
 		{
-			// Amanhecer realista: Night → Sunrise → Day
-			float progress = (float)(nowSec - sunriseStartSec) / (sunriseEndSec - sunriseStartSec);
+			float progress = (float) (nowSec - sunriseStartSec) / (sunriseEndSec - sunriseStartSec);
 
 			if (progress < 0.7f)
 			{
-				// Mantém tons quentes do sunrise
 				float curveProgress = (float) Math.sin(progress / 0.7 * (Math.PI / 2));
 				skyColor = interpolateColor(config.getNightColor(), config.getSunriseColor(), curveProgress);
 			}
 			else
 			{
-				// Transição suave final para o DayColor
+
 				float curveProgress = (float) Math.sin((progress - 0.7f) / 0.3 * (Math.PI / 2));
 				skyColor = interpolateColor(config.getSunriseColor(), config.getDayColor(), curveProgress);
 			}
 		}
 		else if (nowSec < sunsetStartSec)
 		{
-			// Dia
 			skyColor = config.getDayColor();
 		}
 		else if (nowSec < sunsetEndSec)
 		{
-			// Entardecer realista: Day → Sunset → Night
-			float progress = (float)(nowSec - sunsetStartSec) / (sunsetEndSec - sunsetStartSec);
+			float progress = (float) (nowSec - sunsetStartSec) / (sunsetEndSec - sunsetStartSec);
 
 			if (progress < 0.7f)
 			{
@@ -216,7 +222,6 @@ public class DayNightCyclePlugin extends Plugin
 		}
 		else
 		{
-			// Noite
 			skyColor = config.getNightColor();
 		}
 
@@ -224,12 +229,11 @@ public class DayNightCyclePlugin extends Plugin
 	}
 
 
-
 	private Color interpolateColor(Color start, Color end, float t)
 	{
-		int r = (int)(start.getRed() * (1 - t) + end.getRed() * t);
-		int g = (int)(start.getGreen() * (1 - t) + end.getGreen() * t);
-		int b = (int)(start.getBlue() * (1 - t) + end.getBlue() * t);
+		int r = (int) (start.getRed() * (1 - t) + end.getRed() * t);
+		int g = (int) (start.getGreen() * (1 - t) + end.getGreen() * t);
+		int b = (int) (start.getBlue() * (1 - t) + end.getBlue() * t);
 		return new Color(r, g, b);
 	}
 
@@ -243,7 +247,9 @@ public class DayNightCyclePlugin extends Plugin
 			zone = ZoneId.ofOffset("UTC", java.time.ZoneOffset.ofHours(offsetHours));
 		}
 		else
+		{
 			zone = ZoneId.of(config.getCity().getTimezone());
+		}
 
 		String[] parts = timeStr.split(":");
 		int h = parts.length > 0 ? Integer.parseInt(parts[0]) : 0;
@@ -265,28 +271,32 @@ public class DayNightCyclePlugin extends Plugin
 			zone = ZoneId.ofOffset("UTC", java.time.ZoneOffset.ofHours(offsetHours));
 		}
 		else
+		{
 			zone = ZoneId.of(config.getCity().getTimezone());
+		}
 
 		if (config.useCustomHour() && customHourStartTime != null)
 		{
-			// tempo real desde que customHour foi definido
+
 			long elapsedMillis = System.currentTimeMillis() - realMillisAtCustomStart;
 
-			// calcular fator de aceleração do ciclo
-			double cycleSeconds = config.cycleDuration(); // duração completa do ciclo em segundos
-			double factor = 24 * 60 * 60 / cycleSeconds;  // quantos segundos virtuais por segundo real
 
-			long virtualMillis = (long)(elapsedMillis * factor);
+			double cycleSeconds = config.cycleDuration();
+			double factor = 24 * 60 * 60 / cycleSeconds;
+
+			long virtualMillis = (long) (elapsedMillis * factor);
 			return customHourStartTime.plusNanos(virtualMillis * 1_000_000L).withZoneSameInstant(zone);
 		}
 
 		if (config.useRealTimeCycle())
+		{
 			return ZonedDateTime.now(zone);
+		}
 
-		// Ciclo rápido (modo teste)
+		// rapid test
 		long millis = System.currentTimeMillis();
-		float t = (millis % (config.cycleDuration() * 1000L)) / (float)(config.cycleDuration() * 1000L);
-		int totalSeconds = (int)(t * 24 * 60 * 60);
+		float t = (millis % (config.cycleDuration() * 1000L)) / (float) (config.cycleDuration() * 1000L);
+		int totalSeconds = (int) (t * 24 * 60 * 60);
 		int hour = totalSeconds / 3600;
 		int minute = (totalSeconds % 3600) / 60;
 		int second = totalSeconds % 60;
@@ -350,8 +360,14 @@ class SunCalculator
 		double cosH = (Math.cos(Math.toRadians(ZENITH)) - (sinDec * Math.sin(Math.toRadians(latitude)))) /
 			(cosDec * Math.cos(Math.toRadians(latitude)));
 
-		if (cosH > 1) return null;   // sol nunca nasce
-		if (cosH < -1) return null;  // sol nunca se põe
+		if (cosH > 1)
+		{
+			return null;
+		}
+		if (cosH < -1)
+		{
+			return null;
+		}
 
 		// 7b. H in hours
 		double H = sunrise ? 360 - Math.toDegrees(Math.acos(cosH)) : Math.toDegrees(Math.acos(cosH));
@@ -379,14 +395,20 @@ class SunCalculator
 	private static double normalizeAngle(double angle)
 	{
 		angle = angle % 360;
-		if (angle < 0) angle += 360;
+		if (angle < 0)
+		{
+			angle += 360;
+		}
 		return angle;
 	}
 
 	private static double normalizeTime(double t)
 	{
 		t = t % 24;
-		if (t < 0) t += 24;
+		if (t < 0)
+		{
+			t += 24;
+		}
 		return t;
 	}
 }
